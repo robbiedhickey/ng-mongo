@@ -20,9 +20,7 @@
                         <tr ng-repeat="item in items">
                             <td>{{item.name}}</td>
                             <td>
-                                <button class="btn btn-danger" ng-click="removeDb(item)">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
+                                <delete-button>Delete</delete-button>
                             </td>
                         </tr>
                     </tbody>

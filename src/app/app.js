@@ -13,6 +13,15 @@
         };
     });
 
+    ngMongo.directive("deleteButton", function() {
+        return {
+            restrict: "E", //default is attribute
+            transclude: true, //transfer and include the text specified in our directive usage
+            replace: true, //replace the html content
+            template: "<button class='btn btn-danger' ng-click='removeDb(item)' ng-transclude><span class='glyphicon glyphicon-remove'></span></button>",
+        }
+    });
+
     ngMongo.controller("ListCtrl", function ($scope, Mongo) {
 
         // the result of a resource operation is a promise as well,
