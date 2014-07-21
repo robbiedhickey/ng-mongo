@@ -10,7 +10,7 @@
             scope: {
                 // tell angular to peel text attribute value and set a variable named 'text' on the scope
                 text: "@",
-                // & tells angular to delegate whatefver the setting is to the parent scope
+                // & tells angular to delegate whatever the setting is to the parent scope
                 action: "&",
             },
             // notice we are setting the ng-click to action, which is a delegate that is inherited from the parent scope.
@@ -26,7 +26,7 @@
                 text: "@",
                 action: "&"
             },
-            template: "<button class='btn btn-success' ng-click='addDb()'> {{text}}</button>"
+            template: "<button class='btn btn-success' ng-click='action()'> {{text}}</button>"
         }
     });
 

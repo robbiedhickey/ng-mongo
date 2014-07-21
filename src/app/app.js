@@ -1,5 +1,19 @@
 ﻿(function (ngMongo) {
 
+    ngMongo.config(function($routeProvider) {
+        $routeProvider
+            .when("/", {
+                templateUrl: "views/list.html",
+                // notice that this allows us to decouple a template from a controller, 
+                // and instead define it based on an application state!
+                controller: "ListCtrl"
+            })
+            .when("/:database", {
+                templateUrl: "views/list.html",
+                controller: "ListCtrl"
+            });
+    });
+
     ngMongo.factory("Mongo", function($resource) {
         return {
             // RESOURCE GOTCHA: when you use the resource provider,
@@ -9,17 +23,21 @@
             // you will get a list of objects whose members are characters, ex.
             // {"0":"l", "1":"o", "2":"c", "3":"a", "4":"l"}
             // if you need to work with primitive arrays, use $http
-            database: $resource('/mongo-api/dbs')
+            database: $resource('/mongo-api/dbs'),
+            collection: $resource('/mongo-api/:database/')
         };
     });
 
-    ngMongo.controller("ListCtrl", function ($scope, Mongo) {
+    ngMongo.controller("ListCtrl", function ($scope, $routeParams, Mongo) {
+
+        var context = "database";
+        if ($routeParams.database) { context = "collection"; }
 
         // the result of a resource operation is a promise as well,
         // but this promise returns our data wrapped in a Resource prototype.
         // each resource has the associated $get/$query/$save/etc
         // This is very handy when working with lists/details. 
-        $scope.items = Mongo.database.query({}, isArray = true);
+        $scope.items = Mongo[context].query($routeParams, isArray = true);
 
         $scope.addDb = function() {
             var dbName = $scope.newDbName;
@@ -38,4 +56,4 @@
         };
     });
 
-}(angular.module("ngMongo",['ngResource'])));
+}(angular.module("ngMongo",['ngResource', 'ngRoute'])));

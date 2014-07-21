@@ -1,0 +1,22 @@
+﻿<div class="row">
+    <div class="col-lg-9">
+        <table class="table table-striped">
+            <tbody>
+                <tr ng-repeat="item in items">
+                    <td>
+                        <h4>
+                            <a href="#/{{item.details}}">{{item.name}}</a> 
+                        </h4>
+                    </td>
+                    <td>
+                        <delete-button text="Delete" action="removeDb(item)"></delete-button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-3">
+        <input type="text" ng-model="newDbName"/>
+        <add-button text="Add" action="addDb()"></add-button>
+    </div>
+</div>
