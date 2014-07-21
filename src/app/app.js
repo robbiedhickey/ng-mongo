@@ -15,12 +15,23 @@
 
     ngMongo.directive("deleteButton", function() {
         return {
-            restrict: "E", //default is attribute
-            transclude: true, //transfer and include the text specified in our directive usage
-            replace: true, //replace the html content
-            template: "<button class='btn btn-danger' ng-click='removeDb(item)' ng-transclude><span class='glyphicon glyphicon-remove'></span></button>",
+            //default is attribute
+            restrict: "E", 
+            //replace the html content
+            replace: true, 
+            //NOTE: this is not the scope itself! It is a definition object that tells the injected scope what to do.
+            scope: {
+                // tell angular to peel text attribute value and set a variable named 'text' on the scope
+                text: "@", 
+                // & tells angular to delegate whatefver the setting is to the parent scope
+                action: "&", 
+            },  
+            // notice we are setting the ng-click to action, which is a delegate that is inherited from the parent scope.
+            // this allows us to decouple our directive from our controller. 
+            template: "<button class='btn btn-danger' ng-click='action()'><span class='glyphicon glyphicon-remove'></span> {{text}}</button>"
         }
     });
+
 
     ngMongo.controller("ListCtrl", function ($scope, Mongo) {
 
