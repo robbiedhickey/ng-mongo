@@ -10,7 +10,7 @@
         body{ margin: 5em 0 0 1em;}
     </style>
 </head>
-<body ng-app="ngMongo">
+<body>
     <div ng-include="'app/layout/topNav.html'"></div>
     
     <div class="container">
@@ -28,5 +28,14 @@
     <script src="app/app.js"></script>
     <script src="app/directives.js"></script>
     <script src="app/services.js"></script>
+    <script>
+        var TekPub = TekPub || {};
+        $.get("/mongo-api", function(api) {
+            TekPub.MongoApiService = api;
+            angular.element(document).ready(function() {
+                angular.bootstrap(document, ['ngMongo']);
+            });
+        })
+    </script>
 </body>
 </html>

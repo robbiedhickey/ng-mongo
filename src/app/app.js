@@ -1,5 +1,4 @@
 ﻿(function (ngMongo) {
-
     ngMongo.config(function($routeProvider) {
         $routeProvider
             .when("/", {
@@ -21,7 +20,7 @@
             });
     });
 
-    ngMongo.controller("ListCtrl", function ($scope, $routeParams, Mongo) {
+    ngMongo.controller("ListCtrl", function ($scope, $routeParams, Mongo, Media) {
 
         // parameter whitelist
         var params = {
@@ -29,19 +28,20 @@
             collection: $routeParams.collection
         };
 
-        var context = "database";
-        if ($routeParams.database) { context = "collection"; }
+        var context = "root";
+        if (params.database) context = "database"; 
+        if (params.collection) context = "collection"; 
 
         // the result of a resource operation is a promise as well,
         // but this promise returns our data wrapped in a Resource prototype.
         // each resource has the associated $get/$query/$save/etc
         // This is very handy when working with lists/details. 
-        $scope.items = Mongo[context].query(params);
+        $scope.items = Media[context].query(params);
 
         $scope.addItem = function() {
             var newItemName = $scope.newItemName;
             if (newItemName) {
-                var newItem = new Mongo[context]({ name: newItemName });
+                var newItem = new Media[context]({ name: newItemName });
                 newItem.$save(params);
                 console.log(newItem);
                 $scope.items.push(newItem);
@@ -58,8 +58,8 @@
         };
     });
 
-    ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Mongo) {
-        $scope.documents = Mongo.document.query($routeParams);
+    ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Mongo, Media) {
+        $scope.documents = Media.document.query($routeParams);
     });
 
 }(angular.module("ngMongo",['ngResource', 'ngRoute'])));
