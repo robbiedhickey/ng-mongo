@@ -1,29 +1,4 @@
 ﻿(function(ngMongo) {
-    // function declared on provider is not directly usable by controller, it handles configuration and creation of a factory function
-    ngMongo.provider("Mongo", function () {
-        //stage 1: configuration
-        var connectionString = "";
-        this.setConnection = function(conn) {
-            connectionString = conn;
-        }
-
-        //stage 2: inection
-        //created for your with factory and service, but we need to explicitly declare it when using provider
-        // $get is used by the injector, so we must inject our deps here
-        this.$get = function ($resource) {
-            return {
-                connection: connectionString, 
-                database: $resource('/mongo-api/dbs'),
-                collection: $resource('/mongo-api/:database/'),
-                document: $resource('/mongo-api/:database/:collection') 
-            }
-        }
-    });
-
-    ngMongo.config(function(MongoProvider) {
-        MongoProvider.setConnection("");
-    });
-    
     // hyper media, solving the URL problem of maintaining route and API urls
     ngMongo.provider("Media", function() {
         //config

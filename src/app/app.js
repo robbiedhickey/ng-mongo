@@ -20,7 +20,7 @@
             });
     });
 
-    ngMongo.controller("ListCtrl", function ($scope, $routeParams, Mongo, Media) {
+    ngMongo.controller("ListCtrl", function ($scope, $routeParams, Media) {
 
         // parameter whitelist
         var params = {
@@ -58,7 +58,7 @@
         };
     });
 
-    ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Mongo, Media) {
+    ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Media) {
         $scope.documents = Media.document.query($routeParams);
     });
 
