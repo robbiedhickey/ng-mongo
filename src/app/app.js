@@ -37,8 +37,6 @@
     });
 
     ngMongo.controller("ListCtrl", function ($scope, $routeParams, Mongo) {
-
-        _.extend($scope, $routeParams);
         var context = "database";
         if ($routeParams.database) { context = "collection"; }
 
@@ -69,7 +67,6 @@
     });
 
     ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Mongo) {
-        _.extend($scope, $routeParams);
         $scope.documents = Mongo.document.query($routeParams);
     });
 

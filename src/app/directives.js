@@ -31,10 +31,20 @@
     });
 
     //the scope is shared with the parent controller so the bindings still work
-    ngMongo.directive("breadcrumbs", function() {
+    ngMongo.directive("breadcrumbs", function($routeParams) {
         return {
             restrict: "E",
             templateUrl: "views/breadcrumb.html",
+            controller: function ($scope) {
+                var rootUrl = "#/";
+                $scope.crumbs = [ { url: rootUrl, text: "Databases" } ];
+                var runningUrl = rootUrl;
+                for (var param in $routeParams) {
+                    runningUrl += $routeParams[param] + "/";
+                    $scope.crumbs.push({ url: runningUrl, text: $routeParams[param] });
+                }
+
+            }
         }
     });
 
