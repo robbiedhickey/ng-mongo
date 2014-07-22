@@ -13,7 +13,8 @@
             var result = {};
             _.each(resources, function (resource) {
                 //note this is the same thing we were doing in the mongo service, it is just not hard-coded anymore. 
-                result[resource.name] = $resource(resource.url);
+                // also see how we are adding update method to our resources
+                result[resource.name] = $resource(resource.url, {}, {update: {method: 'PUT'}});
             });
             return result;
         };

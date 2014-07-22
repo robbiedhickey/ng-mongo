@@ -15,6 +15,10 @@
                 templateUrl: "views/document.html",
                 controller: "DocumentCtrl"
             })
+            .when("/:database/:collection/:id", {
+                templateUrl: "views/editor.html",
+                controller: "EditorCtrl"
+            })
             .otherwise({
                 template: "<h1>Not Found</h1>"
             });
@@ -24,7 +28,8 @@
         return function (item, arg) {
             var currentLocation = location.href;
             if (currentLocation[currentLocation.length - 1] !== "/") currentLocation += "/";
-            return currentLocation + item[arg];
+            if (item) return currentLocation + item[arg];
+            else return currentLocation + "add";
         };
     });
 
@@ -86,6 +91,64 @@
     ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Media) {
         $scope.documents = Media.document.query($routeParams);
         console.log($scope.documents);
+    });
+
+    ngMongo.controller("EditorCtrl", function ($scope, $routeParams, Media) {
+
+        var editor = ace.edit('ace-editor');
+
+        var renderEditor = function (value) {
+            editor.getSession().setUseWorker(false);
+            editor.getSession().setMode("ace/mode/json");
+
+            var valueString = JSON.stringify(value, null, 2);
+            editor.setValue(valueString);
+            editor.selection.clearSelection();
+        }
+
+        var params = {
+            database: $routeParams.database,
+            collection: $routeParams.collection,
+            id: $routeParams.id
+        };
+
+        var backToList = function() {
+            location.href = "#/" + params.database + "/" + params.collection;
+        }
+
+        var isNew = function() {
+            return params.id === "add";
+        };
+
+        if (isNew()) {
+            renderEditor({ name: "" });
+        } else {
+            $scope.document = Media.document.get(params, function(results) {
+                renderEditor(results.document);
+            });
+        }
+
+
+        $scope.saveDocument = function () {
+            var editorText = editor.getValue();
+            //parse it to JSON
+            var parsed = JSON.parse(editorText);
+            //create document resource
+            var docToSave = new Media.document(parsed);
+
+            if (isNew()) {
+                delete params.id;
+                docToSave.$save(params, backToList);
+            } else {
+                docToSave.$update(params, backToList);
+            }
+        }
+
+        $scope.deleteDocument = function() {
+            if(confirm('Are you sure you want to delete this document?')) {
+                $scope.document.$delete(params, backToList);
+            }
+        };
     });
 
 }(angular.module("ngMongo",['ngResource', 'ngRoute'])));
