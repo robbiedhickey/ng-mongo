@@ -6,7 +6,7 @@
                 <tr ng-repeat="item in items">
                     <td>
                         <h4>
-                            <a href="#/{{item.details}}">{{item.name}}</a> 
+                            <a href="{{item | mongolink:'name'}}">{{item | descriptivename}}</a> 
                         </h4>
                     </td>
                     <td>

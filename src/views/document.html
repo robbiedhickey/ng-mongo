@@ -3,12 +3,18 @@
 <div class="row">
     <div class="col-lg-9" id="document-list">
         <ul>
-            <li class="document pull-left" ng-repeat="doc in documents">
-                {{doc.id}}
+            <li class="document pull-left" ng-repeat="doc in documents | filter:documentName">
+                <p>
+                    <a href="{{ doc | mongolink:'id'}}">{{ doc | descriptivename }}</a>
+                </p>
             </li>
         </ul>
     </div>
     <div class="col-lg-3">
         <h3><a href="#">Add Document</a></h3>
+        <aside class="well">
+            <label>Filter Documents</label>
+            <input type="text" ng-model="documentName"/>
+        </aside>
     </div>
 </div>

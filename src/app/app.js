@@ -20,6 +20,31 @@
             });
     });
 
+    ngMongo.filter("mongolink", function() {
+        return function (item, arg) {
+            var currentLocation = location.href;
+            if (currentLocation[currentLocation.length - 1] !== "/") currentLocation += "/";
+            return currentLocation + item[arg];
+        };
+    });
+
+    ngMongo.filter("descriptivename", function() {
+        return function(item) {
+            var out = item.id;
+            if (item.name)
+                out = item.name;
+            else if (item.sku)
+                out = item.sku;
+            else if (item.slug)
+                out = item.slug;
+            else if (item.title)
+                out = item.title;
+            else if (item.email)
+                out = item.email;
+            return out;
+        }
+    });
+
     ngMongo.controller("ListCtrl", function ($scope, $routeParams, Media) {
 
         // parameter whitelist
@@ -60,6 +85,7 @@
 
     ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Media) {
         $scope.documents = Media.document.query($routeParams);
+        console.log($scope.documents);
     });
 
 }(angular.module("ngMongo",['ngResource', 'ngRoute'])));
