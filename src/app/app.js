@@ -29,13 +29,13 @@
         // but this promise returns our data wrapped in a Resource prototype.
         // each resource has the associated $get/$query/$save/etc
         // This is very handy when working with lists/details. 
-        $scope.items = Mongo[context].query($routeParams, isArray = true);
+        $scope.items = Mongo[context].query();
 
         $scope.addItem = function() {
             var newItemName = $scope.newItemName;
             if (newItemName) {
                 var newItem = new Mongo[context]({ name: newItemName });
-                newItem.$save($routeParams);
+                newItem.$save();
                 console.log(newItem);
                 $scope.items.push(newItem);
             }
@@ -43,9 +43,7 @@
 
         $scope.removeItem = function(item) {
             if (confirm("Delete this " + context + "? There is no undo...")) {
-                var params = { name: item.name };
-                if ($routeParams.database) params.database = $routeParams.database;
-                item.$delete(params);
+                item.$delete({name: item.name});
                 $scope.items.splice($scope.items.indexOf(item), 1);
             }
         };
