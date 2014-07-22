@@ -21,9 +21,9 @@
     // constructor pattern
     // $routeParams is broken! services are a singleton so routeParams will only be the state
     // in which they were initially injected
-    ngMongo.service("Mongo", function ($resource, $routeParams) {
+    ngMongo.service("Mongo", function ($resource) {
         this.database = $resource('/mongo-api/dbs');
-        this.collection = $resource('/mongo-api/:database/', {database: $routeParams.database});
-        this.document = $resource('/mongo-api/:database/:collection', {database: $routeParams.database});
+        this.collection = $resource('/mongo-api/:database/');
+        this.document = $resource('/mongo-api/:database/:collection');
     });
 }(angular.module('ngMongo')));
