@@ -11,6 +11,13 @@
             .when("/:database", {
                 templateUrl: "views/list.html",
                 controller: "ListCtrl"
+            })
+            .when("/:database/:collection", {
+                templateUrl: "views/document.html",
+                controller: "DocumentCtrl"
+            })
+            .otherwise({
+                template: "<h1>Not Found</h1>"
             });
     });
 
@@ -24,7 +31,8 @@
             // {"0":"l", "1":"o", "2":"c", "3":"a", "4":"l"}
             // if you need to work with primitive arrays, use $http
             database: $resource('/mongo-api/dbs'),
-            collection: $resource('/mongo-api/:database/')
+            collection: $resource('/mongo-api/:database/'),
+            document: $resource('/mongo-api/:database/:collection')
         };
     });
 
@@ -58,6 +66,11 @@
                 $scope.items.splice($scope.items.indexOf(item), 1);
             }
         };
+    });
+
+    ngMongo.controller("DocumentCtrl", function($scope, $routeParams, Mongo) {
+        _.extend($scope, $routeParams);
+        $scope.documents = Mongo.document.query($routeParams);
     });
 
 }(angular.module("ngMongo",['ngResource', 'ngRoute'])));
