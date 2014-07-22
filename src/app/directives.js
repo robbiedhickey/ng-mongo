@@ -30,4 +30,12 @@
         }
     });
 
+    //the scope is shared with the parent controller so the bindings still work
+    ngMongo.directive("breadcrumbs", function() {
+        return {
+            restrict: "E",
+            templateUrl: "views/breadcrumb.html",
+        }
+    });
+
 }(angular.module("ngMongo")));
