@@ -39,19 +39,22 @@
         // This is very handy when working with lists/details. 
         $scope.items = Mongo[context].query($routeParams, isArray = true);
 
-        $scope.addDb = function() {
-            var dbName = $scope.newDbName;
-            if (dbName) {
-                var newDb = new Mongo.database({ name: dbName });
-                newDb.$save();
-                $scope.items.push(newDb);
+        $scope.addItem = function() {
+            var newItemName = $scope.newItemName;
+            if (newItemName) {
+                var newItem = new Mongo[context]({ name: newItemName });
+                newItem.$save($routeParams);
+                console.log(newItem);
+                $scope.items.push(newItem);
             }
         };
 
-        $scope.removeDb = function(db) {
-            if (confirm("Delete this database?")) {
-                db.$delete({name: db.name});
-                $scope.items.splice($scope.items.indexOf(db), 1);
+        $scope.removeItem = function(item) {
+            if (confirm("Delete this " + context + "? There is no undo...")) {
+                var params = { name: item.name };
+                if ($routeParams.database) params.database = $routeParams.database;
+                item.$delete(params);
+                $scope.items.splice($scope.items.indexOf(item), 1);
             }
         };
     });
